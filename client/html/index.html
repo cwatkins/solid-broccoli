@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stripe Payment Page Sample</title>
+    <link rel="stylesheet" href="./base.css" />
+    <script src="./terminal.js" defer></script>
+    <script src="./utils.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Terminal Demo</h1>
+      <h2>Example Product - $10.99</h2>
+      <form id="payment-form">
+        <ul>
+          {% for reader in readers %}
+          <li style="list-style-type: none">
+            <label for=" {{ reader.id }}">
+              <input
+                type="radio"
+                id="{{ reader.id }}"
+                name="reader-options"
+                value="{{ reader.id }}"
+                data-device-type="{{ reader.device_type }}"
+              />
+              {{ reader.label }} ({{ reader.id}})
+            </label>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="button-row">
+          <button id="checkout-button">Pay</button>
+          <button id="capture-button">Capture</button>
+          <button id="cancel-button">Cancel</button>
+        </div>
+      </form>
+      <pre id="messages" role="alert" style="display: none"></pre>
+    </main>
+  </body>
+</html>
