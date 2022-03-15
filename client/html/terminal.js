@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }),
       }).then((res) => res.json());
       if (simulatedError) {
+        checkoutButton.disabled = false;
         return handleError();
       }
       addMessage(`Simulated payment for simulated reader ${readerId}`);
