@@ -1,26 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
-
-:root {
-  --light-grey: #F6F9FC;
-  --dark-terminal-color: #0A2540;
-  --accent-color: #635BFF;
-  --radius: 3px;
-}
-
-body {
-  padding: 20px;
-  font-family: 'Raleway';
-  display: flex;
-  justify-content: center;
-  font-size: 1em;
-  color: var(--dark-terminal-color);
-}
-
 main {
-  width: 480px;
-  max-width: 480px;
+  max-width: 900px;
+  max-height: 500px;
 }
 
+/*
 label {
   display: inline-block;
   white-space: nowrap; 
@@ -70,6 +53,10 @@ input[type='radio'], label{
     vertical-align: center;
  }
 
+ input[type='number'] {
+   width: 80%;
+ }
+ 
  pre {
   overflow: auto;
   max-height: 250px;
@@ -91,10 +78,11 @@ input[type='radio'], label{
   margin: 20px 0;
   box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%), 0 30px 60px -30px rgb(0 0 0 / 30%);
 }
+*/
 
 #messages {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New';
-  display: none; /* hide initially, then show once the first message arrives */
+  display: none; 
   background-color: #0A253C;
   color: #00D924;
   padding: 20px;
@@ -102,3 +90,18 @@ input[type='radio'], label{
   border-radius: var(--radius);
   font-size:0.7em;
 } 
+
+[x-cloak] { display: none !important; }
+
+.screen_overlay {
+  background-color: black;
+  top: 169px;
+  left: 98px;
+  height: 378px;
+  width: 220px;
+}
+
+.wpe_image {
+  height: 680px; 
+  width: 420px;
+}

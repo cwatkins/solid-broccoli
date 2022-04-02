@@ -8,7 +8,7 @@ Python 3.6 or newer required.
 import stripe
 import os
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -22,13 +22,13 @@ app = Flask(__name__,
             template_folder=static_dir)
 
 
-@app.route('/', methods=['GET'])
-def index():
-    readers_list = stripe.terminal.Reader.list(limit=3)
-    return render_template(
-        'index.html',
-        readers=readers_list,
-    )
+@app.route("/list-readers", methods=['GET'])
+def list_readers():
+    try:
+        readers = stripe.terminal.Reader.list().data
+        return jsonify({'readers': readers})
+    except Exception as e:
+        return jsonify({'error': {'message': str(e)}}), 400
 
 
 @app.route("/create-payment", methods=['POST'])
