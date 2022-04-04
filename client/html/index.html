@@ -2,10 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Stripe Payment Page Sample</title>
+    <title>Stripe Terminal Sample</title>
     <link rel="stylesheet" href="./base.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="./terminal.js" defer></script>
     <script src="./index.js" defer></script>
     <script src="./utils.js" defer></script>
     <script
@@ -13,135 +12,154 @@
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
   </head>
-  <body>
+  <body x-data="terminalData()" x-cloak x-show="isMounted" x-transition>
+    <header
+      class="sticky top-0 left-0 right-0 z-10 text-center border-b text-xl text-indigo-600 bg-white"
+    >
+      <span class="font-semibold">Stripe Terminal Sample</span>
+    </header>
+    <div
+      :class="{ 'bg-red-300': errorMessage }"
+      class="w-full transition duration-100 h-6 text-center"
+      x-text="errorMessage"
+    ></div>
     <main
-      class="hidden lg:grid grid-cols-2 mx-auto h-4/5"
-      x-data="terminalData()"
+      class="grid grid-rows-6 gap-y-12 mx-auto h-[94vh]"
       x-cloak
       x-show="isMounted"
       x-transition:enter="transform transition delay-100 duration-500 ease-out"
-      x-transition:enter-start="opacity-0 -translate-y-12"
+      x-transition:enter-start="opacity-0 translate-y-12"
       x-transition:enter-end="opacity-100 translate-y-0"
     >
-      <div>
-        <div class="relative h-4/5">
-          <img
-            src="https://i.ibb.co/4KPCfzC/wisepose-straight-1000px.png"
-            alt="wisepose-straight-1000px"
-            width="420"
-            height="577"
-            border="0"
-            class="wpe_image object-cover"
-          />
+      <section
+        class="row-start-1 row-span-4 bg-black text-white h-full w-1/3 lg:w-1/5 mx-auto my-auto text-center font-light text-xs"
+      >
+        <div class="font-light text-xl">
           <div
             x-cloak
-            class="absolute screen_overlay text-center font-light text-xs text-white"
+            x-show="readerScreen === 'in_progress' "
+            x-transition:enter="transform transition delay-100 duration-300 ease-out"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            class="mt-10"
           >
-            <div x-cloak x-show="readerScreen === 'in_progress' " class="mt-4">
-              <p>Total</p>
-              <p class="font-semibold text-xl">$10.99</p>
-              <p>Insert, tap, or swipe to pay</p>
-            </div>
-            <div x-cloak x-show="readerScreen === 'completed' " class="mt-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 mx-auto fill-green-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <p class="font-semibold text-xl">Approved</p>
-              <p>$10.99</p>
-            </div>
-            <div x-cloak x-show="readerScreen === 'idle' " class="mt-10">
-              <svg
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                x="0"
-                y="0"
-                viewBox="0 0 468 222.5"
-                style="enable-background: new 0 0 468 222.5"
-                xml:space="preserve"
-                class="h-16 w-16 mx-auto"
-              >
-                <style>
-                  .st0 {
-                    fill-rule: evenodd;
-                    clip-rule: evenodd;
-                    fill: #fff;
-                  }
-                </style>
-                <path
-                  class="st0"
-                  d="M414 113.4c0-25.6-12.4-45.8-36.1-45.8-23.8 0-38.2 20.2-38.2 45.6 0 30.1 17 45.3 41.4 45.3 11.9 0 20.9-2.7 27.7-6.5v-20c-6.8 3.4-14.6 5.5-24.5 5.5-9.7 0-18.3-3.4-19.4-15.2h48.9c0-1.3.2-6.5.2-8.9zm-49.4-9.5c0-11.3 6.9-16 13.2-16 6.1 0 12.6 4.7 12.6 16h-25.8zM301.1 67.6c-9.8 0-16.1 4.6-19.6 7.8l-1.3-6.2h-22v116.6l25-5.3.1-28.3c3.6 2.6 8.9 6.3 17.7 6.3 17.9 0 34.2-14.4 34.2-46.1-.1-29-16.6-44.8-34.1-44.8zm-6 68.9c-5.9 0-9.4-2.1-11.8-4.7l-.1-37.1c2.6-2.9 6.2-4.9 11.9-4.9 9.1 0 15.4 10.2 15.4 23.3 0 13.4-6.2 23.4-15.4 23.4zM223.8 61.7l25.1-5.4V36l-25.1 5.3zM223.8 69.3h25.1v87.5h-25.1zM196.9 76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7 15.9-6.3 19-5.2v-23c-3.2-1.2-14.9-3.4-20.8 7.4zM146.9 47.6l-24.4 5.2-.1 80.1c0 14.8 11.1 25.7 25.9 25.7 8.2 0 14.2-1.5 17.5-3.3V135c-3.2 1.3-19 5.9-19-8.9V90.6h19V69.3h-19l.1-21.7zM79.3 94.7c0-3.9 3.2-5.4 8.5-5.4 7.6 0 17.2 2.3 24.8 6.4V72.2c-8.3-3.3-16.5-4.6-24.8-4.6C67.5 67.6 54 78.2 54 95.9c0 27.6 38 23.2 38 35.1 0 4.6-4 6.1-9.6 6.1-8.3 0-18.9-3.4-27.3-8v23.8c9.3 4 18.7 5.7 27.3 5.7 20.8 0 35.1-10.3 35.1-28.2-.1-29.8-38.2-24.5-38.2-35.7z"
-                />
-              </svg>
-            </div>
+            <p>Total</p>
+            <p class="font-semibold text-3xl" x-text="chargeAmount"></p>
+            <p>Insert, tap, or swipe to pay</p>
           </div>
         </div>
-      </div>
-      <div class="flex flex-col h-4/5 py-2 justify-between w-full">
-        <form
-          id="payment-form"
-          class="flex flex-col justify-around h-full px-4 shadow-lg border rounded-xl"
-        >
-          <div class="flex flex-col justify-around h-2/3">
-            <div>
-              <h4 class="font-semibold">Input amount (cents)</h4>
-              <input type="number" class="w-full border" />
-            </div>
-            <div>
-              <h4 class="font-semibold">Select reader</h4>
-              <template x-for="reader in readers" :key="reader.id">
-                <button
-                  :key="reader.id"
-                  class="flex flex-row w-full justify-between bg-gray-400 px-6 rounded-md text-sm text-neutral-50 items-center transition hover:brightness-125 py-2 my-2"
-                  :class="{
-                      'font-semibold drop-shadow-lg bg-gray-600 scale-100':
-                        selectedReader && reader.id === selectedReader.id,
-                    }"
-                  @click="setReader(reader)"
-                >
-                  <div class="flex flex-row space-x-2 items-center w-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 py-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                      />
-                    </svg>
-                    <span class="truncate" x-text="reader.label"
-                      >{{ reader.label }}</span
-                    >
-                  </div>
-                </button>
-              </template>
-            </div>
-          </div>
-          <div class="button-row">
-            <button
-              id="checkout-button"
-              class="bg-sky-500 w-full text-white rounded-md h-10 font-semibold"
+        <div class="font-light text-xl">
+          <div
+            x-cloak
+            x-show="readerScreen === 'loading' "
+            x-transition:enter="transform transition duration-100 ease-out"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            class="mt-10"
+          >
+            <svg
+              role="status"
+              class="mx-auto w-12 h-12 text-gray-500 animate-spin dark:text-gray-600 fill-white"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              Pay
-            </button>
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+              />
+            </svg>
           </div>
-        </form>
-      </div>
+        </div>
+        <div
+          x-cloak
+          x-show="readerScreen === 'completed' "
+          x-transition:enter="transform transition delay-100 duration-300 ease-out"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          class="mt-10"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-12 w-12 mx-auto fill-green-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <p class="font-semibold text-3xl">Approved</p>
+          <p class="text-xl" x-text="chargeAmount"></p>
+        </div>
+        <div
+          x-cloak
+          x-show="readerScreen === 'idle' "
+          x-transition:enter="transform transition delay-100 duration-500 ease-out"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          class="mt-10"
+        >
+          <svg
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            x="0"
+            y="0"
+            viewBox="0 0 468 222.5"
+            style="enable-background: new 0 0 468 222.5"
+            xml:space="preserve"
+            class="h-24 w-24 mx-auto"
+          >
+            <style>
+              .st0 {
+                fill-rule: evenodd;
+                clip-rule: evenodd;
+                fill: #fff;
+              }
+            </style>
+            <path
+              class="st0"
+              d="M414 113.4c0-25.6-12.4-45.8-36.1-45.8-23.8 0-38.2 20.2-38.2 45.6 0 30.1 17 45.3 41.4 45.3 11.9 0 20.9-2.7 27.7-6.5v-20c-6.8 3.4-14.6 5.5-24.5 5.5-9.7 0-18.3-3.4-19.4-15.2h48.9c0-1.3.2-6.5.2-8.9zm-49.4-9.5c0-11.3 6.9-16 13.2-16 6.1 0 12.6 4.7 12.6 16h-25.8zM301.1 67.6c-9.8 0-16.1 4.6-19.6 7.8l-1.3-6.2h-22v116.6l25-5.3.1-28.3c3.6 2.6 8.9 6.3 17.7 6.3 17.9 0 34.2-14.4 34.2-46.1-.1-29-16.6-44.8-34.1-44.8zm-6 68.9c-5.9 0-9.4-2.1-11.8-4.7l-.1-37.1c2.6-2.9 6.2-4.9 11.9-4.9 9.1 0 15.4 10.2 15.4 23.3 0 13.4-6.2 23.4-15.4 23.4zM223.8 61.7l25.1-5.4V36l-25.1 5.3zM223.8 69.3h25.1v87.5h-25.1zM196.9 76.7l-1.6-7.4h-21.6v87.5h25V97.5c5.9-7.7 15.9-6.3 19-5.2v-23c-3.2-1.2-14.9-3.4-20.8 7.4zM146.9 47.6l-24.4 5.2-.1 80.1c0 14.8 11.1 25.7 25.9 25.7 8.2 0 14.2-1.5 17.5-3.3V135c-3.2 1.3-19 5.9-19-8.9V90.6h19V69.3h-19l.1-21.7zM79.3 94.7c0-3.9 3.2-5.4 8.5-5.4 7.6 0 17.2 2.3 24.8 6.4V72.2c-8.3-3.3-16.5-4.6-24.8-4.6C67.5 67.6 54 78.2 54 95.9c0 27.6 38 23.2 38 35.1 0 4.6-4 6.1-9.6 6.1-8.3 0-18.9-3.4-27.3-8v23.8c9.3 4 18.7 5.7 27.3 5.7 20.8 0 35.1-10.3 35.1-28.2-.1-29.8-38.2-24.5-38.2-35.7z"
+            />
+          </svg>
+        </div>
+      </section>
+      <section
+        class="mt-4 row-start-5 flex flex-col place-self-center w-1/3 lg:w-1/5 text-center space-y-2"
+      >
+        <div class="flex flex-row w-full justify-between">
+          <label for="readers">Select reader:</label>
+          <select
+            name="readers"
+            id="readers"
+            class="w-3/5 truncate"
+            x-model="readerId"
+          >
+            <option disabled selected value>-- select an option --</option>
+            <option hidden selected></option>
+            <template x-for="reader in readers" :key="reader.id">
+              <option :value="reader.id" x-text="reader.label"></option>
+            </template>
+          </select>
+        </div>
+        <div class="flex flex-row space-x-2">
+          <label for="amount">Amount:</label>
+          <input id="amount" class="w-full border-2" x-model="chargeAmount" />
+        </div>
+        <button
+          @click.prevent="createPayment()"
+          class="bg-indigo-600 text-white w-full text-xl font-semibold py-1"
+        >
+          Pay
+        </button>
+      </section>
     </main>
-    <div class="block lg:hidden">View this on desktop resolution</div>
   </body>
 </html>

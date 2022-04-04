@@ -34,9 +34,9 @@ def list_readers():
 @app.route("/create-payment", methods=['POST'])
 def create_payment_intent():
     try:
-        # amount = request.get_json().get('amount')
+        amount = request.get_json().get('amount')
         payment_intent = stripe.PaymentIntent.create(
-            amount=1099,
+            amount=amount,
             currency="usd",
             payment_method_types=["card_present"],
             capture_method="manual")
@@ -64,7 +64,7 @@ def process_payment_intent():
 def simulate_terminal_payment():
     try:
         reader_id = request.get_json().get('reader_id')
-        reader = stripe.test_helpers.SimulatedReader.simulate_payment(
+        reader = stripe.terminal.Reader.TestHelpers.present_payment_method(
             reader_id)
         return jsonify({'reader_state': reader})
     except Exception as e:
